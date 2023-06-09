@@ -1,0 +1,228 @@
+"" Source your .vimrc
+source ~/.vimrc
+
+" let g:mapleader = "\'"
+" let mapleader = "\'"
+
+map <Space> <Nop>
+let g:mapleader = " "
+let mapleader = " "
+unmap <F3>
+unmap <F4>
+unmap <F5>
+unmap <F6>
+
+map <F6> <Action>(StepOver)
+" nnoremap <c-k> :set hls!<CR>
+
+"" -- Suggested options --
+" Show a few lines of context around the cursor. Note that this makes the
+" text scroll if you mouse-click near the start or end of the window.
+set scrolloff=5
+
+" Do incremental searching.
+" set incsearch
+
+" Don't use Ex mode, use Q for formatting.
+map Q gq
+
+Plug "tpope/vim-commentary"
+Plug 'AlexPl292/IdeaVim-EasyMotion'
+
+"" -- Map IDE actions to IdeaVim -- https://jb.gg/abva4t
+map <Leader>vso :w<CR>:source ~/.vimrc<CR>:source ~/.ideavimrc<CR>
+
+map geda <Action>(EditorActions)
+map gd <Action>(GotoDeclaration)
+map gi <Action>(GotoImplementation)
+map ge <Action>(EvaluateExpression)
+
+map L <Action>(NextTab)
+map H <Action>(PreviousTab)
+
+map mu 4k
+map md 4j
+
+map mmm <Action>(GoToMenu)
+map mmu <Action>(EditorPageUp)
+map mmd <Action>(EditorPageDown)
+" map md 16j
+" map mu 16k
+map mhttp <Action>(com.intellij.httpClient.microservices.actions.HttpGenerateRequestFromEndpointsAction)
+
+map mb <Action>(Back)
+map mf <Action>(Forward)
+map mr <Action>(RecentFiles)
+map <leader>, <Action>(RecentFiles)
+map ml <Action>(RecentLocations)
+
+map mw <Action>(JumpToLastWindow)
+map <leader>ww <Action>(JumpToLastWindow)
+
+map se <Action>(ShowErrorDescription)
+map me <Action>(GotoNextError)
+map <leader>xx <Action>(ShowErrorDescription)
+map mE <Action>(GotoPreviousError)
+map mge <Action>(GoToErrorGroup)
+
+map ms <Action>(FileStructurePopup)
+
+map mnm <Action>(MethodDown)
+map mpm <Action>(MethodUp)
+
+map mari <Action>(Maven.Reimport)
+map marip <Action>(Maven.ReimportProject)
+
+" map <C-n> <Down>
+" map <C-p> <Up>
+map <c-n> <Action>(FindNext)
+map <c-p> <Action>(FindPrevious)
+
+map <leader>rip <Action>(ReplaceInPath)
+
+map g* <Action>(FindUsages)
+map gr <Action>(FindUsages)
+map gj <Action>(EditorDuplicateLines)
+
+map gp <Action>(PasteMultiple)
+
+map gl <Action>(IntroduceVariable)
+map gs <Action>(IntroduceConstant)
+map gm <Action>(ExtractMethod)
+map go <Action>(OptimizeImports)
+
+map gC <Action>(CollapseSelection)
+map zi <Action>(CollapseSelection)
+
+map gf <Action>(SelectIn)
+map <leader>e <Action>(SelectIn)
+map gh <Action>(FindInPath)
+
+map <leader>qq <Action>(CloseProject)
+nmap <leader>q :bd<cr>
+nmap <leader>bd :bd<cr>
+"" Map gr to the Reformat Code action
+
+map <leader>hw <Action>(Hotswap)
+" map <leader>shw <Action>(SingleHotswap)
+map <leader>npw <Action>(NextProjectWindow)
+map <leader>nw <Action>(NextWindow)
+map <leader>ppw <Action>(PreviousProjectWindow)
+map <leader>pw <Action>(PreviousWindow)
+
+map <leader>us <Action>(Unsplit)
+map <leader>usa <Action>(UnsplitAll)
+
+map <leader>w- <Action>(SplitHorizontally)
+map <leader>w| <Action>(SplitVertically)
+
+map <leader>irc <Action>(editRunConfigurations)
+map <leader>rc <Action>(Diff.ResolveConflict)
+map <leader>sl <Action>(LocalHistory.ShowHistory)
+map <leader>scl <Action>(Vcs.Show.Local.Changes)
+
+map <leader>dn <Action>(Diff.NextChange)
+map <leader>dp <Action>(Diff.PrevChange)
+
+" map mc <Action>(NextDiff)
+" map mC <Action>(PreviousDiff)
+" unmap mc
+" unmap mc
+map <leader>nc <Action>(JumpToNextChange)
+map <leader>cc <Action>(JumpToLastChange)
+
+map <leader>rv <Action>(Move)
+map <leader>ca <Action>(ShowIntentionActions)
+map <leader>re <Action>(ShowIntentionActions)
+map <leader>cp <Action>(CopyPaths)
+
+map <leader>rn <Action>(RenameElement)
+map <leader>rl <Action>(ReformatCode)
+map <leader>rr <Action>(ShowReformatFileDialog)
+map <leader>p <Action>(ReformatWithPrettierAction)
+
+"" Map <leader>a to show authors
+map <leader>a <Action>(Annotate)
+"" Map <leader>d to start debug
+map <leader>d <Action>(Debug)
+map <leader>run <Action>(Run)
+
+"" Map \b to toggle the breakpoint on the current line
+map <leader>b <Action>(ToggleLineBreakpoint)
+
+"" Special action
+" comment all function when cursor is at function name
+nmap gcf ^f{V%gcjj
+nmap gcif [{V%gcjj
+nmap gcb gCVgcjj
+
+" delete function body inside {
+nmap <leader><leader>dfb f{v%da{}jj
+
+" go to all members of a java class
+map mmem /private\\\|protected\\\|public<cr>Nf(
+
+" catch all autowired stuffs
+map mauto /autowired<cr>
+
+" catch all autowired stuffs
+map mover /override<cr>
+
+" cut and copy whole function
+map <leader>xf ^vf{%$d<cr>
+map <leader>cf ^vf{%$y<cr>
+
+" Press `f` to activate AceJump
+map <leader>j <Action>(AceAction)
+" Press `F` to activate Target Mode
+map <leader>J <Action>(AceTargetAction)
+" Press `gal` to activate Line Mode
+map gal <Action>(AceLineAction)
+" Press `S` in normal mode to activate AceJump mode before the caret
+nmap S <Action>(AceBackwardAction)
+" Press `s` in normal mode to activate AceJump mode after the caret
+nmap s <Action>(AceForwardAction)
+
+nmap <leader>open <Action>(ManageRecentProjects)
+
+nmap <leader>dso <Action>(StepOver)
+nmap <leader>dst <Action>(Stop)
+nmap <leader>dsO <Action>(StepOut)
+nmap <leader>dsi <Action>(StepInto)
+
+" go to class
+map mclass /\(public\\\|private\\\|protected\)[ \\t].*class<cr>
+" Find more examples here: https://jb.gg/share-ideavimrc
+sethandler <C-2> a:ide
+sethandler <C-S-2> a:ide
+sethandler <C-6> a:ide
+sethandler <C-S-6> a:ide
+sethandler <C-A> a:ide
+sethandler <C-B> a:ide
+sethandler <C-C> a:ide
+sethandler <C-D> a:vim
+sethandler <C-E> a:ide
+sethandler <C-F> a:ide
+sethandler <C-G> a:ide
+sethandler <C-H> a:vim
+sethandler <C-I> a:ide
+sethandler <C-J> a:vim
+sethandler <C-K> a:vim
+sethandler <C-L> a:vim
+sethandler <C-M> a:ide
+sethandler <C-N> a:vim
+sethandler <C-O> a:ide
+sethandler <C-P> a:vim
+sethandler <C-Q> a:vim
+sethandler <C-R> a:vim
+sethandler <C-S> a:ide
+sethandler <C-T> a:vim
+sethandler <C-U> a:vim
+sethandler <C-V> a:ide
+sethandler <C-W> a:vim
+sethandler <C-X> a:ide
+sethandler <C-Y> a:vim
+sethandler <C-[> a:ide
+sethandler <C-\> a:ide
+sethandler <C-]> a:ide
+set ideajoin

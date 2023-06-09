@@ -1,0 +1,5 @@
+print("This is awesome vanilla neovim")
+require("nhannd.remap")
+require("nhannd.clipboard")
+require("nhannd.packer")
+require("nhannd.general")
