@@ -72,8 +72,13 @@ return require("packer").startup(function(use)
     run = ":MasonUpdate", -- :MasonUpdate updates registry contents
   })
   use({
-    "williamboman/mason-lspconfig.nvim",
-    "neovim/nvim-lspconfig",
+    "williamboman/mason-lspconfig.nvim"
+  })
+  use({
+    "neovim/nvim-lspconfig"
+  })
+  use({
+    "mfussenegger/nvim-jdtls",
   })
   use({
     "VonHeikemen/lsp-zero.nvim",
@@ -83,9 +88,9 @@ return require("packer").startup(function(use)
       { "neovim/nvim-lspconfig" }, -- Required
 
       -- Autocompletion
-      { "hrsh7th/nvim-cmp" },  -- Required
+      { "hrsh7th/nvim-cmp" },     -- Required
       { "hrsh7th/cmp-nvim-lsp" }, -- Required
-      { "L3MON4D3/LuaSnip" },  -- Required
+      { "L3MON4D3/LuaSnip" },     -- Required
     },
   })
   use({
@@ -122,6 +127,18 @@ return require("packer").startup(function(use)
       -- you can configure Hop the way you like here; see :h hop-config
       require("hop").setup({ keys = "etovxqpdygfblzhckisuran" })
     end,
+  })
+  use({
+    "nvim-tree/nvim-web-devicons",
+  })
+  use({
+    "akinsho/bufferline.nvim",
+    tag = "*",
+    config = function()
+      vim.opt.termguicolors = true
+      require("bufferline").setup({})
+    end,
+    requires = "nvim-tree/nvim-web-devicons",
   })
   use({
     "nvim-lualine/lualine.nvim",
@@ -166,12 +183,12 @@ return require("packer").startup(function(use)
     "smjonas/inc-rename.nvim",
     config = function()
       require("inc_rename").setup({
-        cmd_name = "IncRename", -- the name of the command
-        hl_group = "Substitute", -- the highlight group used for highlighting the identifier's new name
+        cmd_name = "IncRename",     -- the name of the command
+        hl_group = "Substitute",    -- the highlight group used for highlighting the identifier's new name
         preview_empty_name = false, -- whether an empty new name should be previewed; if false the command preview will be cancelled instead
-        show_message = true,    -- whether to display a `Renamed m instances in n files` message after a rename operation
-        input_buffer_type = nil, -- the type of the external input buffer to use (the only supported value is currently "dressing")
-        post_hook = nil,        -- callback to run after renaming, receives the result table (from LSP handler) as an argument
+        show_message = true,        -- whether to display a `Renamed m instances in n files` message after a rename operation
+        input_buffer_type = nil,    -- the type of the external input buffer to use (the only supported value is currently "dressing")
+        post_hook = nil,            -- callback to run after renaming, receives the result table (from LSP handler) as an argument
       })
     end,
   })
@@ -188,65 +205,18 @@ return require("packer").startup(function(use)
   use({
     "lewis6991/gitsigns.nvim",
     config = function()
-      require("gitsigns").setup({
-        on_attach = function(bufnr)
-          local gs = package.loaded.gitsigns
-
-          local function map(mode, l, r, opts)
-            opts = opts or {}
-            opts.buffer = bufnr
-            vim.keymap.set(mode, l, r, opts)
-          end
-
-          -- Navigation
-          map("n", "]c", function()
-            if vim.wo.diff then
-              return "]c"
-            end
-            vim.schedule(function()
-              gs.next_hunk()
-            end)
-            return "<Ignore>"
-          end, { expr = true })
-
-          map("n", "[c", function()
-            if vim.wo.diff then
-              return "[c"
-            end
-            vim.schedule(function()
-              gs.prev_hunk()
-            end)
-            return "<Ignore>"
-          end, { expr = true })
-
-          -- Actions
-          map("n", "<leader>hs", gs.stage_hunk)
-          map("n", "<leader>hr", gs.reset_hunk)
-          map("v", "<leader>hs", function()
-            gs.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
-          end)
-          map("v", "<leader>hr", function()
-            gs.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
-          end)
-          map("n", "<leader>hS", gs.stage_buffer)
-          map("n", "<leader>hu", gs.undo_stage_hunk)
-          map("n", "<leader>hR", gs.reset_buffer)
-          map("n", "<leader>hp", gs.preview_hunk)
-          map("n", "<leader>hb", function()
-            gs.blame_line({ full = true })
-          end)
-          map("n", "<leader>tb", gs.toggle_current_line_blame)
-          map("n", "<leader>hd", gs.diffthis)
-          map("n", "<leader>hD", function()
-            gs.diffthis("~")
-          end)
-          map("n", "<leader>td", gs.toggle_deleted)
-
-          -- Text object
-          map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>")
-        end,
-      })
+      require("config.gitsigns-config").setup()
     end,
   })
   use("famiu/bufdelete.nvim")
+  use({
+    "iamcco/markdown-preview.nvim",
+    run = function()
+      vim.fn["mkdp#util#install"]()
+    end,
+    setup = function()
+      vim.g.mkdp_filetypes = { "markdown" }
+    end,
+    ft = { "markdown" },
+  })
 end)

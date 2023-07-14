@@ -99,7 +99,10 @@ local configs = {
     icons_enabled = true,
     -- theme = require("after.plugin.lualine-theme"),
     theme = "auto",
-    section_separators = { left = '', right = '' },
+    -- component_separators = { left = '', right = ''},
+    -- section_separators = { left = '', right = ''},
+    -- section_separators = { left = '', right = '' },
+    section_separators = { left = '', right = '' },
     component_separators = { left = '', right = '' },
     disabled_filetypes = {
       statusline = {},
@@ -170,10 +173,10 @@ local configs = {
     lualine_y = {},
     lualine_z = {},
   },
-  tabline = {
-    lualine_a = {"buffers"},
+  -- tabline = {
+    -- lualine_a = {"buffers"},
     -- lualine_a = {},
-  },
+  -- },
   winbar = {
     lualine_a = {
       {

@@ -14,9 +14,9 @@ lsp.nvim_workspace()
 local cmp = require('cmp')
 local cmp_select = {behavior = cmp.SelectBehavior.Select}
 local cmp_mappings = lsp.defaults.cmp_mappings({
-  ['<c-n>'] = cmp.mapping.select_prev_item(cmp_select),
-  ['<c-p>'] = cmp.mapping.select_next_item(cmp_select),
-  ['<Tab>'] = cmp.mapping.confirm({ select = true }),
+  ['<S-Tab>'] = cmp.mapping.select_prev_item(cmp_select),
+  ['<Tab>'] = cmp.mapping.select_next_item(cmp_select),
+  ['<CR>'] = cmp.mapping.confirm({ select = true }),
   ["<C-CR>"] = cmp.mapping.complete(),
 })
 --
@@ -36,6 +36,10 @@ lsp.set_preferences({
         info = 'I'
     }
 })
+
+lsp.skip_server_setup({'jdtls'})
+
+-- lspconfig.jdtls.setup(jdtls_config)
 
 ---@diagnostic disable-next-line: unused-local
 lsp.on_attach(function(client, bufnr)

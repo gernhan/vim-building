@@ -3,23 +3,35 @@ vim.keymap.set("n", "<leader>wd", ":q<cr>", { desc = "Close tab/window" })
 vim.keymap.set("n", "<leader>ww", "<c-w>p", { desc = "Back to last tab/window" })
 
 vim.keymap.set("n", "<leader>ss", ":w<cr>")
-vim.keymap.set("n", "<leader>lso", ":w<cr>:so<cr>:source ~/.config/nvim/init.lua<cr>")
-vim.keymap.set("n", "<leader>lsp", ":w<cr>:so<cr>:PackerSync<cr>:source ~/.config/nvim/init.lua<cr>")
-vim.keymap.set("n", "<leader>lsi", ":w<cr>:so<cr>:PackerInstall<cr>:source ~/.config/nvim/init.lua<cr>")
+vim.keymap.set("n", "<leader>lso", ":w<cr>:so<cr>:PackerClean<cr>:PackerCompile<cr>:source ~/.config/nvim/init.lua<cr>")
+vim.keymap.set("n", "<leader>lsp",
+  ":w<cr>:so<cr>:PackerSync<cr>:PackerClean<cr>:source ~/.config/nvim/init.lua<cr>")
+vim.keymap.set("n", "<leader>lsi",
+  ":w<cr>:so<cr>:PackerInstall<cr>:PackerClean<cr>:PackerCompile<cr>:source ~/.config/nvim/init.lua<cr>")
 vim.keymap.set("n", "<leader>lll", ":source ~/.config/nvim/init.lua<cr>")
 
 vim.keymap.set("n", "<leader>bb", ":b#<cr>")
 vim.keymap.set("n", "<leader>bd", ":Bdelete<cr>")
 vim.keymap.set("n", "<leader>qq", ":qa<cr>", {})
 
-vim.keymap.set({ "n", "v" }, "mu", "4k")
-vim.keymap.set("n", "mmu", "<c-u>")
-vim.keymap.set({ "n", "v" }, "md", "4j")
-vim.keymap.set("n", "mmd", "<c-d>")
+vim.keymap.set({ "n", "v" }, "mu", "4k", { desc = "Move up" })
+vim.keymap.set("n", "mmu", "<c-u>", { desc = "Page up" })
+vim.keymap.set("n", "mmk", "<c-u>", { desc = "Page up" })
+vim.keymap.set({ "n", "v" }, "mk", "10k", { desc = "Scroll up" })
+
+vim.keymap.set({ "n", "v" }, "md", "4j", { desc = "Move down" })
+vim.keymap.set("n", "mmd", "<c-d>", { desc = "Page down" })
+vim.keymap.set("n", "mmj", "<c-d>", { desc = "Page down" })
+vim.keymap.set({ "n", "v" }, "mj", "10j", { desc = "Scroll down" })
+
 vim.keymap.set("n", "mb", "<c-o>", { desc = "Move back" })
 vim.keymap.set("n", "mf", "<c-i>", { desc = "Move forward" })
+vim.keymap.set("n", "<leader>nn", ":enew<cr>", { desc = "New File" })
 
 local default_opts = { noremap = true, silent = true }
+local function desc(description)
+  return { noremap = true, silent = true, desc = description }
+end
 local expr_opts = { noremap = true, expr = true, silent = true }
 -- local keymap = function (mode, shortcut, command, opts)
 --   local custom_opts = default_opts
@@ -44,11 +56,11 @@ keymap("n", "n", "nzz", default_opts)
 keymap("n", "N", "Nzz", default_opts)
 
 vim.keymap.set("n", "<leader>rep", function()
-  return ":<c-u>" .. "%s/".. "<C-r>\"" .."//"
+  return ":<c-u>" .. "%s/" .. "<C-r>\"" .. "//"
 end, { expr = true })
 
 vim.keymap.set("v", "<leader>rep", function()
-  return "y:" .. "let @/=escape(@\", '/\')<cr>" .. ":%s/\\(".. "<C-r>/" .."\\)/\\1"
+  return "y:" .. "let @/=escape(@\", '/\')<cr>" .. ":%s/\\(" .. "<C-r>/" .. "\\)/\\1"
 end, { expr = true })
 
 -- Visual line wraps
@@ -75,6 +87,14 @@ keymap("n", "<ESC>", ":nohlsearch<Bar>:echo<CR>", default_opts)
 keymap("x", "J", ":move '>+1<CR>gv-gv", default_opts)
 keymap("x", "K", ":move '<-2<CR>gv-gv", default_opts)
 
+keymap("n", "<Leader>cr", ":%s/\\\\n/\\r/g<CR>:%s/\\\\t/\\t/g<CR>", desc('Format error logs with \n and \t characters'))
+
+keymap("v", "gj", "Vygv<Esc>p", desc('Dupplicate whole lines'))
+keymap("n", "gj", "Vygv<Esc>p", desc('Dupplicate whole lines'))
+
+keymap("v", "gk", "Vy<Esc>P", desc('Dupplicate whole lines'))
+keymap("n", "gk", "Vy<Esc>P", desc('Dupplicate whole lines'))
+
 -- Resizing panes
 keymap("n", "<Left>", ":vertical resize +1<CR>", default_opts)
 keymap("n", "<Right>", ":vertical resize -1<CR>", default_opts)
@@ -91,4 +111,13 @@ keymap("t", "<leader>kkk", "<c-\\><c-n>:bd!<cr>", default_opts)
 keymap("n", "<leader>kkk", ":bd!<cr>", default_opts)
 vim.keymap.set("n", "<leader>it", function()
   return ":e " .. vim.fn.expand("%:p:h") .. "/"
+end, { expr = true })
+vim.keymap.set("", "<c-S>", function()
+  return ":w " .. vim.fn.expand("%:p:h:F")
+end, { expr = true })
+vim.keymap.set("", "<Leader>S", function()
+  return ":w " .. vim.fn.expand("%:p:h:F")
+end, { expr = true })
+vim.keymap.set("", "<Leader>cp", function()
+  return ":let @+=" .. vim.fn.expand("%:p") .. "<cr>"
 end, { expr = true })
