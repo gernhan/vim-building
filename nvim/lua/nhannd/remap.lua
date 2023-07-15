@@ -11,7 +11,9 @@ vim.keymap.set("n", "<leader>lsi",
 vim.keymap.set("n", "<leader>lll", ":source ~/.config/nvim/init.lua<cr>")
 
 vim.keymap.set("n", "<leader>bb", ":b#<cr>")
+vim.keymap.set("n", "<leader>bd", "<Nop>")
 vim.keymap.set("n", "<leader>bd", ":Bdelete<cr>")
+vim.keymap.set("n", "<leader>dd", ":Bdelete<cr>")
 vim.keymap.set("n", "<leader>qq", ":qa<cr>", {})
 
 vim.keymap.set({ "n", "v" }, "mu", "4k", { desc = "Move up" })

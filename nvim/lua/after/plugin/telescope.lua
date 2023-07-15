@@ -28,6 +28,7 @@ vim.keymap.set('n', '<leader>th', builtin.colorscheme, {})
 
 vim.keymap.set('n', '<leader>fauto', builtin.autocommands, {})
 vim.keymap.set('n', '<leader>reg', builtin.registers, {})
+vim.keymap.set('n', 'gp', builtin.registers, {})
 require('telescope.actions')require('telescope').setup {
   pickers = {
     buffers = {

@@ -20,7 +20,7 @@ local function get_bundles()
   local java_test_path = java_test:get_install_path()
   local bundles = {}
   vim.list_extend(bundles,
-  vim.split(vim.fn.glob(java_debug_path .. "/extension/server/com.microsoft.java.debug.plugin-*.jar"), "\n"))
+    vim.split(vim.fn.glob(java_debug_path .. "/extension/server/com.microsoft.java.debug.plugin-*.jar"), "\n"))
   vim.list_extend(bundles, vim.split(vim.fn.glob(java_test_path .. "/extension/server/*.jar"), "\n"))
   return bundles
 end
@@ -64,6 +64,15 @@ vim.api.nvim_create_autocmd("FileType", {
       local keys = { mode = { "n", "v" }, ["<leader>lj"] = { name = "+Java" } }
       wk.register(keys)
 
+      map("n", "mcl", '/\\(public\\|private\\|protected\\)[ \\t].*\\(class\\|interface\\)<cr>:nohlsearch<Bar><CR>',
+        "Move to class")
+      map("n", "mpm", 'k/\\(public\\|private\\|protected\\).*\\((\\)<cr>Nf(b:nohlsearch<Bar><CR>',
+        "Move to last function")
+      map("n", "mnm", '?\\(public\\|private\\|protected\\).*\\((\\)<cr>Nf(b:nohlsearch<Bar><CR>',
+        "Move to next function")
+      map("n", "<leader>vb", '[{vo%', "Visualize whole block")
+      map("n", "<leader>vf", '/\\(public\\|private\\|protected\\).*\\((\\)<cr>Nf(b:nohlsearch<Bar><CR>/{<CR>v%',
+        "Visualize whole function")
       map("n", "<leader>go", jdtls.organize_imports, "Organize Imports")
       map("n", "<leader>gl", jdtls.extract_variable, "Extract Variable")
       map("n", "<leader>gs", jdtls.extract_constant, "Extract Constant")
@@ -80,6 +89,12 @@ vim.api.nvim_create_autocmd("FileType", {
           local _, _ = pcall(vim.lsp.codelens.refresh)
         end,
       })
+      vim.cmd [[
+      set foldmethod=syntax
+      set foldenable
+      syn region foldBraces start=/{/ end=/}/ transparent fold keepend extend
+      syn region foldJavadoc start=+/\*+ end=+\*/+ transparent fold keepend extend
+      ]]
     end
 
     local config = {
@@ -160,7 +175,7 @@ vim.api.nvim_create_autocmd("FileType", {
           },
           inlayHints = {
             parameterNames = {
-              enabled = "all",       -- literals, all, none
+              enabled = "all", -- literals, all, none
             },
           },
           format = {
@@ -184,4 +199,3 @@ vim.api.nvim_create_autocmd("FileType", {
     require("jdtls").start_or_attach(config)
   end,
 })
-
