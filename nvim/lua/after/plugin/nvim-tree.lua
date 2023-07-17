@@ -8,8 +8,11 @@ vim.opt.termguicolors = true
 
 -- empty setup using defaults
 -- require("nvim-tree").setup()
-vim.keymap.set("n", "<leader>e", vim.cmd.NvimTreeToggle, { desc = "Toggle Nvim Tree"})
-vim.keymap.set("n", "gf", vim.cmd.NvimTreeFindFileToggle, { desc = "Display this file in Nvim Tree"})
+vim.keymap.set("n", "<leader>e", vim.cmd.NvimTreeToggle, { desc = "Toggle Nvim Tree" })
+vim.keymap.set("n", "gf", function()
+  vim.fn.execute('NvimTreeClose')
+  vim.fn.execute('NvimTreeFindFileToggle')
+end, { desc = "Display this file in Nvim Tree" })
 
 local function my_on_attach(bufnr)
   local api = require('nvim-tree.api')
@@ -33,4 +36,3 @@ local function my_on_attach(bufnr)
 end
 
 return my_on_attach
-

@@ -172,23 +172,26 @@ vim.api.nvim_create_autocmd("FileType", {
           },
           references = {
             includeDecompiledSources = true,
+            includeAllProjectSources = true,
+            includeComments = true,
+            includeOverridden = true
           },
           inlayHints = {
             parameterNames = {
               enabled = "all", -- literals, all, none
             },
           },
-          format = {
-            enabled = false,
-          },
-          -- NOTE: We can set the formatter to use different styles
           -- format = {
-          --   enabled = true,
-          --   settings = {
-          --     url = vim.fn.stdpath "config" .. "/lang-servers/intellij-java-google-style.xml",
-          --     profile = "GoogleStyle",
-          --   },
+          --   enabled = false,
           -- },
+          -- NOTE: We can set the formatter to use different styles
+          format = {
+            enabled = true,
+            settings = {
+              url = vim.fn.stdpath "config" .. "/lang-servers/compax.xml",
+              profile = "compax",
+            },
+          },
         },
       },
       init_options = {
@@ -196,6 +199,13 @@ vim.api.nvim_create_autocmd("FileType", {
         extendedClientCapabilities = extendedClientCapabilities,
       },
     }
+    vim.cmd [[
+    " Enable comment beautification for nvim-jdtls
+    let g:jdtls_formatter_config = {
+        \ 'eclipse.jdt.ls.core.formatter.comment.format_line_comment': 'enabled',
+        \ 'eclipse.jdt.ls.core.formatter.comment.format_block_comment': 'enabled'
+        \ }
+    ]]
     require("jdtls").start_or_attach(config)
   end,
 })
