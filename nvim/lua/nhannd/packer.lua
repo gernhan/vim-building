@@ -12,7 +12,7 @@ end
 vim.cmd([[
 augroup packer_user_config
 autocmd!
-autocmd BufWritePost plugins.lua source <afile> | PackerSync
+autocmd BufWritePost ~/.config/nvim/lua/nhannd/packer.lua source ~/.config/nvim/init.lua | PackerSync
 augroup end
 ]])
 
@@ -43,8 +43,23 @@ return require("packer").startup(function(use)
     tag = "0.1.1",
     -- or                            , branch = '0.1.x',
     requires = { { "nvim-lua/plenary.nvim" } },
+    config = function()
+      require('telescope').setup({
+        defaults = {
+          layout_strategy = "flex",
+          layout_config = {
+            flex = {
+              width = 0.9,
+              height = 0.9,
+            },
+          }
+        }
+      })
+    end
   })
   use({ "rose-pine/neovim", as = "rose-pine" })
+  use { "catppuccin/nvim", as = "catppuccin" }
+
   use("nvim-treesitter/nvim-treesitter", { run = ":TSUpdate" })
   use("nvim-treesitter/playground")
   use("ThePrimeagen/harpoon")
@@ -110,7 +125,7 @@ return require("packer").startup(function(use)
         filters = {
           dotfiles = true,
         },
-        on_attach = require("after.plugin.nvim-tree"),
+        on_attach = require("config.nvim-tree"),
       })
     end,
   })
@@ -143,7 +158,7 @@ return require("packer").startup(function(use)
   use({
     "nvim-lualine/lualine.nvim",
     config = function()
-      require("after.plugin.lualine").setup()
+      require("config.lualine").setup()
     end,
   })
   use({
@@ -164,13 +179,13 @@ return require("packer").startup(function(use)
   use({
     "folke/which-key.nvim",
     config = function()
-      require("after.plugin.whichkey").setup()
+      require("config.whichkey").setup()
     end,
   })
   use({
     "jose-elias-alvarez/null-ls.nvim",
     config = function()
-      local settings = require("after.plugin.null-ls-config")
+      local settings = require("config.null-ls-config")
       local null_ls = require("null-ls")
       null_ls.setup(settings)
     end,
@@ -219,4 +234,5 @@ return require("packer").startup(function(use)
     end,
     ft = { "markdown" },
   })
+  use 'norcalli/nvim-colorizer.lua'
 end)

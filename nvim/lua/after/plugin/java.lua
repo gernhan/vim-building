@@ -1,3 +1,4 @@
+local mvn_path = vim.fn.expand("$HOME") .. "/.m2/repository"
 local function get_jdtls()
   local mason_registry = require "mason-registry"
   local jdtls = mason_registry.get_package "jdtls"
@@ -52,6 +53,11 @@ vim.api.nvim_create_autocmd("FileType", {
       require("jdtls.dap").setup_dap_main_class_configs()
       require("jdtls.setup").add_commands()
 
+      print("workspace_dir: " .. workspace_dir)
+      print("launcher: " .. launcher)
+      print("os_config: " .. os_config)
+      print("lombok: " .. lombok)
+
       local map = function(mode, lhs, rhs, desc)
         if desc then
           desc = desc
@@ -64,7 +70,7 @@ vim.api.nvim_create_autocmd("FileType", {
       local keys = { mode = { "n", "v" }, ["<leader>lj"] = { name = "+Java" } }
       wk.register(keys)
 
-      map("n", "mcl", '/\\(public\\|private\\|protected\\)[ \\t].*\\(class\\|interface\\)<cr>:nohlsearch<Bar><CR>',
+      map("n", "mcl", '/\\(public\\|private\\|protected\\)\\( class \\| interface \\)<cr>',
         "Move to class")
       map("n", "mpm", 'k/\\(public\\|private\\|protected\\).*\\((\\)<cr>Nf(b:nohlsearch<Bar><CR>',
         "Move to last function")
@@ -83,16 +89,65 @@ vim.api.nvim_create_autocmd("FileType", {
       map("v", "<leader>gs", "<esc><cmd>lua require('jdtls').extract_constant(true)<cr>", "Extract Constant")
       map("v", "gm", "<esc><Cmd>lua require('jdtls').extract_method(true)<cr>", "Extract Method")
 
+      local root = require("jdtls.setup").find_root { "pom.xml" }
+      print("root: " .. root)
+      -- Set the individual classpaths as environment variables
+      vim.env.LOG4J_CLASSPATH = mvn_path .. "/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar:" ..
+          mvn_path .. "/ch/qos/logback/logback-classic/1.2.12/logback-classic-1.2.12.jar:" ..
+          mvn_path .. "/ch/qos/logback/logback-core/1.2.12/logback-core-1.2.12.jar:" ..
+          mvn_path .. "/org/apache/logging/log4j/log4j-to-slf4j/2.17.2/log4j-to-slf4j-2.17.2.jar:" ..
+          mvn_path .. "/org/apache/logging/log4j/log4j-api/2.17.2/log4j-api-2.17.2.jar:" ..
+          mvn_path .. "/org/slf4j/jul-to-slf4j/1.7.36/jul-to-slf4j-1.7.36.jar"
+
+      vim.env.JACKSON_CLASSPATH =
+          mvn_path .. "/com/fasterxml/jackson/core/jackson-databind/2.13.5/jackson-databind-2.13.5.jar:" ..
+          mvn_path .. "/com/fasterxml/jackson/core/jackson-annotations/2.13.5/jackson-annotations-2.13.5.jar:" ..
+          mvn_path .. "/com/fasterxml/jackson/core/jackson-core/2.13.5/jackson-core-2.13.5.jar:" ..
+          mvn_path .. "/com/fasterxml/jackson/datatype/jackson-datatype-jdk8/2.13.5/jackson-datatype-jdk8-2.13.5.jar:" ..
+          mvn_path .. "/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.13.5/jackson-datatype-jsr310-2.13.5.jar:" ..
+          mvn_path .. "/com/fasterxml/jackson/module/jackson-module-parameter-names/2.13.5/jackson-module-parameter-names-2.13.5.jar"
+
+      vim.env.ROOT_CLASSPATH = root .. "/target/classes"
+      vim.env.LOMBOK_CP = lombok
+
+      vim.keymap.set("n", "<leader>run", function()
+        vim.cmd('let @+=expand("%:p")')
+        local filename = vim.fn.getreg("+")
+        local io_utils = require("utils.io")
+        local regex_pattern = '^package%s*(%S+);'
+        local extracted_text = io_utils.extract_text_using_regex(filename, regex_pattern)
+        if extracted_text then
+          print("Found text:", extracted_text)
+          local package_name = extracted_text
+          regex_pattern = 'public%s+class%s+(%w+)%s*'
+          extracted_text = io_utils.extract_text_using_regex(filename, regex_pattern)
+          if extracted_text then
+            local class_name = extracted_text
+            local main_class = package_name .. "." .. class_name
+            print("Class Name:", class_name)
+            local command = string.format(
+              [[execute 'term java -classpath $LOG4J_CLASSPATH:$JACKSON_CLASSPATH:$ROOT_CLASSPATH %s']], main_class)
+            print("cmd: ", command)
+            vim.cmd(command)
+          else
+            print("Class Name not found in the file or the file couldn't be read.")
+          end
+        else
+          print("package name not found in the file or the file couldn't be read.")
+        end
+      end)
+
       vim.api.nvim_create_autocmd("BufWritePost", {
         pattern = { "*.java" },
         callback = function()
           local _, _ = pcall(vim.lsp.codelens.refresh)
         end,
       })
+
       vim.cmd [[
       set foldmethod=syntax
       set foldenable
-      syn region foldBraces start=/{/ end=/}/ transparent fold keepend extend
+      syn region foldBraces start=/\{/ end=/\}/ transparent fold keepend extend
       syn region foldJavadoc start=+/\*+ end=+\*/+ transparent fold keepend extend
       ]]
     end
@@ -188,8 +243,8 @@ vim.api.nvim_create_autocmd("FileType", {
           format = {
             enabled = true,
             settings = {
-              url = vim.fn.stdpath "config" .. "/lang-servers/compax.xml",
-              profile = "compax",
+              url = vim.fn.stdpath "config" .. "/lang-servers/intellij-java-google-style.xml",
+              profile = "google-style",
             },
           },
         },

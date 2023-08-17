@@ -1,3 +1,4 @@
+vim.opt.cursorline = true
 vim.opt.guicursor = ""
 
 vim.opt.nu = true
@@ -38,7 +39,7 @@ vim.g.netrw_winsize = 25
 
 vim.env.JAVA_HOME = "/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home"
 vim.env.JAVA_TOOL_OPTIONS =
-"-javaagent:/Users/nhannd/.m2/repository/org/projectlombok/lombok/1.18.26/lombok-1.18.26.jar"
+"-javaagent:" .. vim.fn.expand("$HOME") .. "/.m2/repository/org/projectlombok/lombok/1.18.26/lombok-1.18.26.jar"
 
 vim.g.jdtls_workspace = {
   data = vim.fn.expand("~/jdtls_data"),

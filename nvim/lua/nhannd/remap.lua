@@ -4,17 +4,15 @@ vim.keymap.set("n", "<leader>ww", "<c-w>p", { desc = "Back to last tab/window" }
 
 vim.keymap.set("n", "<leader>ss", ":w<cr>")
 vim.keymap.set("n", "<leader>lso", ":w<cr>:so<cr>:PackerClean<cr>:PackerCompile<cr>:source ~/.config/nvim/init.lua<cr>")
+vim.keymap.set("n", "<leader>so", function()
+  require "utils.cht".so_input()
+  require "utils.dev".reload_modules()
+end)
 vim.keymap.set("n", "<leader>lsp",
   ":w<cr>:so<cr>:PackerSync<cr>:PackerClean<cr>:source ~/.config/nvim/init.lua<cr>")
 vim.keymap.set("n", "<leader>lsi",
   ":w<cr>:so<cr>:PackerInstall<cr>:PackerClean<cr>:PackerCompile<cr>:source ~/.config/nvim/init.lua<cr>")
 vim.keymap.set("n", "<leader>lll", ":source ~/.config/nvim/init.lua<cr>")
-
-vim.keymap.set("n", "<leader>bb", ":b#<cr>")
-vim.keymap.set("n", "<leader>bd", "<Nop>")
-vim.keymap.set("n", "<leader>bd", ":Bdelete<cr>")
-vim.keymap.set("n", "<leader>dd", ":Bdelete<cr>")
-vim.keymap.set("n", "<leader>qq", ":qa<cr>", {})
 
 vim.keymap.set({ "n", "v" }, "mu", "4k", { desc = "Move up" })
 vim.keymap.set("n", "mmu", "<c-u>", { desc = "Page up" })
@@ -44,6 +42,13 @@ local expr_opts = { noremap = true, expr = true, silent = true }
 -- end
 local keymap = vim.api.nvim_set_keymap
 
+keymap("n", "<leader>bb", ":b#<cr>", default_opts)
+keymap("n", "<leader>bd", "<Nop>", default_opts)
+-- keymap("n", "<leader>bd", ":Bdelete<cr>", default_opts)
+keymap("n", "<leader>bd", ":NvimTreeClose|bp|bd #<cr>", default_opts)
+keymap("n", "<leader>dd", ":Bdelete<cr>", default_opts)
+keymap("n", "<leader>qq", ":qa<cr>", {})
+
 keymap("n", "<c-a>", "ggVG", default_opts)
 keymap("n", "<c-n>", ":tabnew<cr>", default_opts)
 
@@ -59,6 +64,30 @@ keymap("n", "N", "Nzz", default_opts)
 
 vim.keymap.set("n", "<leader>rep", function()
   return ":<c-u>" .. "%s/" .. "<C-r>\"" .. "//"
+end, { expr = true })
+
+vim.keymap.set("n", "<leader>2c", function()
+  return ":%s" .. "/_\\(\\w\\)" .. "/\\u\\1" .. "/gc<cr>"
+end, { expr = true })
+
+vim.keymap.set("v", "<leader>2c", function()
+  return ":s" .. "/_\\(\\w\\)" .. "/\\u\\1" .. "/<cr>"
+end, { expr = true })
+
+vim.keymap.set("n", "<leader>c2c", function()
+  return "viw:s" .. "/_\\(\\w\\)" .. "/\\u\\1" .. "/g<cr>"
+end, { expr = true })
+
+vim.keymap.set("n", "<leader>2u", function()
+  return ":%s" .. "/\\(\\l\\)\\(\\u\\)" .. "/\\1_\\l\\2" .. "/gc<cr>"
+end, { expr = true })
+
+vim.keymap.set("v", "<leader>2u", function()
+  return ":s" .. "/\\(\\l\\)\\(\\u\\)" .. "/\\1_\\l\\2" .. "/g<cr>"
+end, { expr = true })
+
+vim.keymap.set("n", "<leader>u2u", function()
+  return "viw:s" .. "/\\(\\l\\)\\(\\u\\)" .. "/\\1_\\l\\2" .. "/g<cr>"
 end, { expr = true })
 
 vim.keymap.set("v", "<leader>rep", function()
@@ -91,11 +120,11 @@ keymap("x", "K", ":move '<-2<CR>gv-gv", default_opts)
 
 keymap("n", "<Leader>cr", ":%s/\\\\n/\\r/g<CR>:%s/\\\\t/\\t/g<CR>", desc('Format error logs with \n and \t characters'))
 
-keymap("v", "gj", "Vygv<Esc>p", desc('Dupplicate whole lines'))
-keymap("n", "gj", "Vygv<Esc>p", desc('Dupplicate whole lines'))
+keymap("v", "gj", "Vygv<Esc>p", desc('Duplicate whole lines'))
+keymap("n", "gj", "Vygv<Esc>p", desc('Duplicate whole lines'))
 
-keymap("v", "gk", "Vy<Esc>P", desc('Dupplicate whole lines'))
-keymap("n", "gk", "Vy<Esc>P", desc('Dupplicate whole lines'))
+keymap("v", "gk", "Vy<Esc>P", desc('Duplicate whole lines'))
+keymap("n", "gk", "Vy<Esc>P", desc('Duplicate whole lines'))
 
 -- Resizing panes
 keymap("n", "<Left>", ":vertical resize +1<CR>", default_opts)
@@ -120,6 +149,7 @@ end, { expr = true })
 vim.keymap.set("", "<Leader>S", function()
   return ":w " .. vim.fn.expand("%:p:h:F")
 end, { expr = true })
+-- vim.cmd [[ nmap <Leader>cp :let @+ = expand("%:p")<cr><esc> ]]
 vim.keymap.set("", "<Leader>cp", function()
-  return ":let @+=" .. vim.fn.expand("%:p") .. "<cr>"
+  return ":let @+=" .. "expand(\"%:p\")" .. "<cr>"
 end, { expr = true })
