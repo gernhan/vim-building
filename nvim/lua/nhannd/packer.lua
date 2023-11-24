@@ -40,7 +40,7 @@ return require("packer").startup(function(use)
   use("wbthomason/packer.nvim")
   use({
     "nvim-telescope/telescope.nvim",
-    tag = "0.1.1",
+    tag = "0.1.4",
     -- or                            , branch = '0.1.x',
     requires = { { "nvim-lua/plenary.nvim" } },
     config = function()
@@ -168,7 +168,7 @@ return require("packer").startup(function(use)
     end,
     requires = {
       "MunifTanjim/nui.nvim",
-      "rcarriga/nvim-notify",
+      -- "rcarriga/nvim-notify",
     },
   })
   use({
@@ -207,7 +207,10 @@ return require("packer").startup(function(use)
       })
     end,
   })
-  use("m4xshen/autoclose.nvim")
+  use("windwp/nvim-autopairs")
+  use("windwp/nvim-ts-autotag")
+  use("L3MON4D3/LuaSnip")
+  use("rafamadriz/friendly-snippets")
   use({
     "kylechui/nvim-surround",
     tag = "*", -- Use for stability; omit to use `main` branch for the latest features

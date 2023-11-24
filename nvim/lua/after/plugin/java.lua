@@ -70,7 +70,7 @@ vim.api.nvim_create_autocmd("FileType", {
       local keys = { mode = { "n", "v" }, ["<leader>lj"] = { name = "+Java" } }
       wk.register(keys)
 
-      map("n", "mcl", '/\\(public\\|private\\|protected\\)\\( class \\| interface \\)<cr>',
+      map("n", "mcl", '/\\(public\\|private\\|protected\\)\\( class \\| abstract class \\| interface \\)<cr><esc>',
         "Move to class")
       map("n", "mpm", 'k/\\(public\\|private\\|protected\\).*\\((\\)<cr>Nf(b:nohlsearch<Bar><CR>',
         "Move to last function")
@@ -137,12 +137,12 @@ vim.api.nvim_create_autocmd("FileType", {
         end
       end)
 
-      vim.api.nvim_create_autocmd("BufWritePost", {
-        pattern = { "*.java" },
-        callback = function()
-          local _, _ = pcall(vim.lsp.codelens.refresh)
-        end,
-      })
+      -- vim.api.nvim_create_autocmd("BufWritePost", {
+      --   pattern = { "*.java" },
+      --   callback = function()
+      --     local _, _ = pcall(vim.lsp.codelens.refresh)
+      --   end,
+      -- })
 
       vim.cmd [[
       set foldmethod=syntax
@@ -185,7 +185,7 @@ vim.api.nvim_create_autocmd("FileType", {
           signatureHelp = { enabled = true },
           contentProvider = { preferred = "fernflower" },
           saveActions = {
-            organizeImports = true,
+            organizeImports = false,
           },
           sources = {
             organizeImports = {

@@ -45,7 +45,7 @@ local keymap = vim.api.nvim_set_keymap
 keymap("n", "<leader>bb", ":b#<cr>", default_opts)
 keymap("n", "<leader>bd", "<Nop>", default_opts)
 -- keymap("n", "<leader>bd", ":Bdelete<cr>", default_opts)
-keymap("n", "<leader>bd", ":NvimTreeClose|bp|bd #<cr>", default_opts)
+keymap("n", "<leader>bd", ":bd<cr>", default_opts)
 keymap("n", "<leader>dd", ":Bdelete<cr>", default_opts)
 keymap("n", "<leader>qq", ":qa<cr>", {})
 
