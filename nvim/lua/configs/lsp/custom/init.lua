@@ -1,5 +1,8 @@
+require("configs.lsp.custom.luals")
 require("configs.lsp.custom.bash")
 require("configs.lsp.custom.golang")
 require("configs.lsp.custom.tsserver")
 require("configs.lsp.custom.java")
+require("configs.lsp.custom.sqlls")
+require("configs.lsp.custom.rust")
 require("configs.lsp.custom.others")

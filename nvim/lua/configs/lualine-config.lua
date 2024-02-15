@@ -53,31 +53,25 @@ local function lsp_client(msg)
   local buf_ft = vim.bo.filetype
   local buf_client_names = {}
 
-  -- add client
+  -- add client other than 'null-ls'
   for _, client in pairs(buf_clients) do
     if client.name ~= "null-ls" then
       table.insert(buf_client_names, client.name)
     end
   end
 
+  local null_ls_utils = require("m_utils.null-ls")
   -- add formatter
-  local formatters = require("config.lsp.null-ls.formatters")
-  local supported_formatters = formatters.list_registered(buf_ft)
+  local supported_formatters = null_ls_utils.list_registered(buf_ft, require("null-ls").methods.FORMATTING)
   vim.list_extend(buf_client_names, supported_formatters)
-
   -- add linter
-  local linters = require("config.lsp.null-ls.linters")
-  local supported_linters = linters.list_registered(buf_ft)
+  local supported_linters = null_ls_utils.list_registered(buf_ft, require("null-ls").methods.DIAGNOSTICS)
   vim.list_extend(buf_client_names, supported_linters)
-
   -- add hover
-  local hovers = require("config.lsp.null-ls.hovers")
-  local supported_hovers = hovers.list_oogistered(buf_ft)
+  local supported_hovers = null_ls_utils.list_registered(buf_ft, require("null-ls").methods.HOVER)
   vim.list_extend(buf_client_names, supported_hovers)
-
   -- add code action
-  local code_actions = require("config.lsp.null-ls.code_actions")
-  local supported_code_actions = code_actions.list_registered(buf_ft)
+  local supported_code_actions = null_ls_utils.list_registered(buf_ft, require("null-ls").methods.CODE_ACTION)
   vim.list_extend(buf_client_names, supported_code_actions)
 
   local hash = {}
@@ -91,8 +85,6 @@ local function lsp_client(msg)
   table.sort(client_names)
   return "[" .. table.concat(client_names, ", ") .. "]"
 end
-
-local winbar = require("configs.winbar")
 
 local configs = {
   options = {
@@ -137,59 +129,6 @@ local configs = {
     lualine_c = {
       { separator },
       {
-        "macro-recording",
-        fmt = show_macro_recording,
-      },
-      { separator },
-      {
-        lsp_client,
-        icon = icons.ui.Gear,
-        color = { fg = colors.violet, gui = "bold" },
-        on_click = function()
-          vim.cmd([[LspInfo]])
-        end,
-      },
-    },
-    lualine_x = { "filename", { tab_stop }, "encoding", "fileformat", "filetype", "progress" },
-    lualine_y = {},
-    lualine_z = { "location" },
-  },
-  inactive_sections = {
-    lualine_a = {},
-    lualine_b = {},
-    lualine_c = { "filename" },
-    lualine_x = { "location" },
-    lualine_y = {},
-    lualine_z = {},
-  },
-  -- tabline = {
-  -- 	lualine_a = { "buffers" },
-  -- },
-  winbar = {
-    lualine_a = {
-      {
-        "diagnostics",
-        sources = { "nvim_diagnostic" },
-        diagnostics_color = {
-          error = "DiagnosticError",
-          warn = "DiagnosticWarn",
-          info = "DiagnosticInfo",
-          hint = "DiagnosticHint",
-        },
-        colored = true,
-        on_click = function()
-          vim.diagnostic.setloclist()
-        end,
-      },
-    },
-    lualine_b = {},
-    lualine_c = {},
-    lualine_x = {
-      {
-        winbar.get_winbar,
-        color = { fg = colors.violet, gui = "bold" },
-      },
-      {
         require("noice").api.status.message.get_hl,
         cond = require("noice").api.status.message.has,
         color = { fg = "#ff9e64", bg = "none" },
@@ -209,19 +148,36 @@ local configs = {
         cond = require("noice").api.status.search.has,
         color = { fg = "#ff9e64", bg = "none" },
       },
+      {
+        "macro-recording",
+        fmt = show_macro_recording,
+      },
     },
+    lualine_x = {
+      -- { separator },
+      {
+        -- lsp_client,
+        function(msg)
+          return lsp_client(msg) or "No Lsp Client"
+        end,
+        icon = icons.ui.Gear,
+        color = { fg = colors.violet, gui = "bold" },
+        on_click = function()
+          vim.cmd([[LspInfo]])
+        end,
+      },
+      { tab_stop }, "encoding", "fileformat", "filetype", "progress" },
     lualine_y = {},
-    lualine_z = {},
+    lualine_z = { "location" },
   },
-  inactive_winbar = {
+  inactive_sections = {
     lualine_a = {},
     lualine_b = {},
-    lualine_c = {},
-    lualine_x = {},
+    lualine_c = { "filename" },
+    lualine_x = { "location" },
     lualine_y = {},
     lualine_z = {},
   },
-  extensions = { "nvim-tree", "toggleterm", "quickfix" },
 }
 
 function M.setup()

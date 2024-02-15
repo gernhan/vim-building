@@ -2,6 +2,7 @@ return {
   { "hrsh7th/cmp-buffer" },
   { "hrsh7th/cmp-cmdline" },
   { "hrsh7th/cmp-nvim-lsp" },
+  { "rcarriga/cmp-dap" },
   {
     "L3MON4D3/LuaSnip",
     dependencies = {
@@ -18,6 +19,10 @@ return {
       local cmp_select = { behavior = cmp.SelectBehavior.Select }
 
       cmp.setup({
+        enabled = function()
+          return vim.api.nvim_buf_get_option(0, "buftype") ~= "prompt"
+              or require("cmp_dap").is_dap_buffer()
+        end,
         snippet = {
           -- REQUIRED - you must specify a snippet engine
           expand = function(args)
@@ -76,6 +81,12 @@ return {
               }
             }
           })
+      })
+
+      cmp.setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
+        sources = {
+          { name = "dap" },
+        },
       })
     end,
   },
