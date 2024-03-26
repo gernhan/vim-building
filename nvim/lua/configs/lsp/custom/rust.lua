@@ -1,5 +1,5 @@
 local lspconfig  = require("lspconfig")
-local opts       = require("configs.lsp.custom.general-opts")
+local opts       = require("configs.lsp.custom.general-opts").default
 
 local other_opts = {
   -- Server-specific settings. See `:help lspconfig-setup`

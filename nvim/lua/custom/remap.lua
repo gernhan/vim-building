@@ -1,3 +1,4 @@
+local m_utils = require "m_utils"
 vim.g.mapleader = " "
 vim.keymap.set("n", "<leader>wd", ":q<cr>", { desc = "Close tab/window" })
 vim.keymap.set("n", "<leader>ww", "<c-w>p", { desc = "Back to last tab/window" })
@@ -25,7 +26,8 @@ local expr_opts = { noremap = true, expr = true, silent = true }
 local keymap = vim.api.nvim_set_keymap
 
 keymap("n", "<leader>bb", ":b#<cr>", desc("Back to the last file"))
-keymap("n", "<leader>bd", ":Bdelete<cr>", desc("Close tab"))
+keymap("n", "<leader>bd", ":NvimTreeClose<cr>:bd<cr>", desc("Close tab"))
+-- keymap("n", "<leader>bd", ":Bdelete<cr>", desc("Close tab"))
 keymap("n", "<leader>dd", ":Bdelete<cr>", desc("Close tab"))
 keymap("n", "<leader>qd", ":bd<cr>", desc("Close tab without closing nvim-tree"))
 keymap("n", "<leader>qq", ":qa<cr>", desc("Close all tabs and quit"))
@@ -130,6 +132,4 @@ vim.keymap.set("", "<Leader>S", function()
   return ":w " .. vim.fn.expand("%:p:h:F")
 end, { expr = true, desc = "Save as" })
 -- vim.cmd [[ nmap <Leader>cp :let @+ = expand("%:p")<cr><esc> ]]
-vim.keymap.set("", "<Leader>cp", function()
-  return ":let @+=" .. "expand(\"%:p\")" .. "<cr>"
-end, { expr = true, desc = "Copy path of this file" })
+vim.keymap.set("", "<Leader>cp", m_utils.copy_absolute_path, { desc = "Copy path of this file" })

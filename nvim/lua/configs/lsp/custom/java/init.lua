@@ -11,7 +11,7 @@ local configurations = require("configs.lsp.custom.java.configuration")
 local test = require("configs.lsp.custom.java.test")
 local java_dap = require("configs.lsp.custom.java.dap")
 local home = vim.fn.expand("$HOME")
-local general_opts = require("configs.lsp.custom.general-opts")
+local general_opts = require("configs.lsp.custom.general-opts").default
 
 vim.api.nvim_create_autocmd("FileType", {
   pattern = { "java" },

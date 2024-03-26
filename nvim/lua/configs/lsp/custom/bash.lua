@@ -1,11 +1,12 @@
-local lspconfig = require("lspconfig")
-local util = require "lspconfig/util"
+local lspconfig    = require("lspconfig")
+local util         = require "lspconfig/util"
 -- The nvim-cmp almost supports LSP's capabilities so You should advertise it to LSP servers..
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
+local m_utils      = require('m_utils')
 
 lspconfig.bashls.setup({
   capabilities = capabilities,
-  cmd = { 'bash-language-server', 'start' },
+  -- cmd = { 'bash-language-server', 'start' },
   settings = {
     bashIde = {
       -- Glob pattern for finding and parsing shell script files in the workspace.
@@ -36,12 +37,20 @@ lspconfig.bashls.setup({
       root_dir = [[util.find_git_ancestor]],
     },
   },
-  {
-    on_attach = function(client, bufnr)
-      if client.server_capabilities.documentSymbolProvider then
-        require("nvim-navic").attach(client, bufnr)
-        require("nvim-navbuddy").attach(client, bufnr)
-      end
+  on_attach = function(client, bufnr)
+    if client.server_capabilities.documentSymbolProvider then
+      require("nvim-navic").attach(client, bufnr)
+      require("nvim-navbuddy").attach(client, bufnr)
     end
-  }
+
+    vim.keymap.set("n", "<leader>run", function()
+      local this_file = m_utils.copy_absolute_path()
+      local command = string.format(
+        [[execute 'term chmod +x %s && sh %s']],
+        this_file,
+        this_file
+      )
+      vim.cmd(command)
+    end)
+  end
 })

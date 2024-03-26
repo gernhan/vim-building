@@ -6,15 +6,16 @@ vim.opt.guicursor = ""
 vim.opt.nu = true
 vim.opt.relativenumber = true
 
-vim.opt.tabstop = 2
-vim.opt.softtabstop = 2
-vim.opt.shiftwidth = 2
-vim.opt.expandtab = true
+-- vim.opt.softtabstop = 2
+-- Set indentation settings
+vim.o.expandtab = true -- Use spaces instead of <Tab>
+vim.o.shiftwidth = 2   -- Set the number of spaces per indent
+vim.o.tabstop = 2      -- Set the number of spaces for <Tab> key
 
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
-vim.opt.smartindent = true
+-- vim.opt.smartindent = true
 
 vim.opt.wrap = true
 

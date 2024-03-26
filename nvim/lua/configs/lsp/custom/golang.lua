@@ -1,6 +1,6 @@
 local lspconfig    = require("lspconfig")
 local util         = require "lspconfig/util"
-local general_opts = require("configs.lsp.custom.general-opts")
+local general_opts = require("configs.lsp.custom.general-opts").default
 local map          = require "m_utils/mapping".map
 
 lspconfig.gopls.setup {

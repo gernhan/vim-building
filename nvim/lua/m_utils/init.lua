@@ -144,4 +144,10 @@ function M.mergeTable(source, destination)
   end
 end
 
+function M.copy_absolute_path()
+  local file_path = vim.fn.expand('%:p')
+  vim.fn.setreg('+', file_path)
+  return file_path
+end
+
 return M

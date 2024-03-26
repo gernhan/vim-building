@@ -66,6 +66,12 @@ local g_configs = {
 }
 function M.setup()
   require("gitsigns").setup(g_configs)
+  vim.cmd([[
+    augroup transparent_signs
+      au!
+      autocmd ColorScheme * highlight SignColumn guibg=NONE
+    augroup END
+  ]])
 end
 
 return M

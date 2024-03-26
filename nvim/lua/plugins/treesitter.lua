@@ -10,7 +10,7 @@ return {
       },
       modules = {},
       -- A list of parser names, or "all" (the five listed parsers should always be installed)
-      ensure_installed = { "c", "lua", "vim", "vimdoc", "javascript", "rust", "java", "typescript", "yaml", "sql", "bash" },
+      ensure_installed = { "c", "lua", "vim", "vimdoc", "javascript", "rust", "java", "typescript", "yaml", "sql", "bash", "markdown", "markdown_inline" },
 
       -- Install parsers synchronously (only applied to `ensure_installed`)
       sync_install = false,
@@ -53,5 +53,7 @@ return {
         }
       },
     })
+
+    vim.cmd([[autocmd BufRead,BufNewFile *.vw set filetype=sql]])
   end
 }

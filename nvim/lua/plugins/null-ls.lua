@@ -9,8 +9,10 @@ return {
         -- formaters
         -- b.formatting.google_java_format,
         b.formatting.stylua,
-        b.formatting.beautysh,
-        b.formatting.yamlfmt,
+        b.formatting.beautysh.with({
+          extra_args = { "--indent-size", "2" },
+        }),
+        -- b.formatting.yamlfmt,
         b.formatting.prettier,
         b.formatting.mdformat,
         b.formatting.fixjson,
@@ -33,13 +35,12 @@ return {
         b.diagnostics.eslint,
         b.diagnostics.jsonlint,
         b.diagnostics.yamllint,
-        b.diagnostics.write_good,
-        b.diagnostics.markdownlint,
         b.diagnostics.shellcheck,
 
         -- code actions
         b.code_actions.cspell,
         b.code_actions.eslint,
+        b.code_actions.eslint_d,
         b.code_actions.gitsigns,
         b.code_actions.gitrebase,
         b.code_actions.gomodifytags,

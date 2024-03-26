@@ -1,15 +1,15 @@
 return {
   {
-    -- event = "VeryLazy",
+    event = "VeryLazy",
     lazy = false,
-    priority = 2000,
+    -- priority = 2000,
     "rebelot/kanagawa.nvim",
     config = function()
       require("configs.colors.kanagawa")
 
       -- setup must be called before loading
-      vim.cmd("colorscheme kanagawa-dragon")
-    end
+      -- vim.cmd("colorscheme kanagawa-dragon")
+    end,
   },
   {
     "catppuccin/nvim",
@@ -17,7 +17,7 @@ return {
     name = "catppuccin",
     config = function()
       -- vim.cmd.colorscheme "catppuccin-macchiato"
-    end
+    end,
   },
   {
     {
@@ -32,11 +32,11 @@ return {
         -- vim.cmd 'colorscheme darcula-solid'
         -- vim.cmd 'colorscheme darcula-solid-custom'
         -- vim.cmd 'set termguicolors'
-      end
-    }
+      end,
+    },
   },
   {
-    'doums/darcula',
+    "doums/darcula",
     event = "VeryLazy",
     config = function()
       -- vim.cmd [[
@@ -44,29 +44,45 @@ return {
       --   " let g:lightline = { 'colorscheme': 'darculaOriginal' }
       --   " set termguicolors
       -- ]]
-    end
+    end,
   },
   {
     "folke/tokyonight.nvim",
-    -- priority = 2000,
-    event = "VeryLazy",
+    priority = 2000,
+    -- event = "VeryLazy",
+    opts = {
+      style = "storm",
+      transparent = true,
+      styles = {
+        sidebars = "transparent",
+        floats = "transparent",
+      },
+    },
     config = function()
-      -- vim.cmd("colorscheme tokyonight-night")
-    end
+      vim.cmd("colorscheme tokyonight-storm")
+      -- vim.cmd([[
+      --      highlight Normal guibg=none
+      --      highlight NonText guibg=none
+      --      highlight Normal ctermbg=none
+      --      highlight NonText ctermbg=none
+      --      hi NvimTreeNormal guibg=NONE ctermbg=NONE
+      --      hi NvimTreeNormalNC guibg=NONE
+      --    ]])
+    end,
   },
   {
     "bluz71/vim-nightfly-colors",
     event = "VeryLazy",
     config = function()
       -- vim.cmd("colorscheme tokyonight")
-    end
+    end,
   },
   {
     "NLKNguyen/papercolor-theme",
     event = "VeryLazy",
     config = function()
       -- vim.cmd("colorscheme tokyonight")
-    end
+    end,
   },
   {
     "baliestri/aura-theme",
@@ -75,7 +91,7 @@ return {
       -- config = function(plugin)
       -- vim.opt.rtp:append(plugin.dir .. "/packages/neovim")
       -- vim.cmd([[colorscheme aura-dark]])
-    end
+    end,
   },
   {
     "rose-pine/neovim",
@@ -86,5 +102,5 @@ return {
       require("configs.colors.rose-pine")
       -- vim.cmd.colorscheme("rose-pine")
     end,
-  }
+  },
 }
